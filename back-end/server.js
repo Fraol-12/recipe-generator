@@ -4,7 +4,7 @@ const port = 5000;
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
-
+const axios = require('axios');
 app.use(cors());
 app.use(express.json());
 
@@ -30,6 +30,7 @@ const connectDB = async () => {
 
 connectDB();
 
+console.log(process.env.SPOONACULAR_API_KEY);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
