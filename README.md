@@ -1,1 +1,1 @@
-# Recipe Generator
+Simple recipe generator app by MERN stack
