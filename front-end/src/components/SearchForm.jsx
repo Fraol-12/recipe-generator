@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import "./SearchForm.css";
 const SearchForm = ({ setRecipes, setError }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const SearchForm = ({ setRecipes, setError }) => {
       const data = await res.json();
 
       if (Array.isArray(data) && data.length > 0) {
-        setRecipes(data); // ✅ update App state
+        setRecipes(data);
       } else {
         setError("No recipes found for this query");
       }
@@ -40,26 +40,28 @@ const SearchForm = ({ setRecipes, setError }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md mx-auto mt-8">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">🍳 Recipe Finder</h1>
+    <div className="search-container">
+      <form onSubmit={handleSubmit} className="search-form">
+        <h1 className="search-title">Recipe Finder</h1>
 
-      <input
-        type="text"
-        placeholder="Enter a food name (e.g., pasta)"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        required
-      />
+        <input
+          type="text"
+          placeholder="Enter a food name"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="search-input"
+          required
+        />
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-blue-500 text-white font-medium py-2 rounded-lg hover:bg-blue-600 transition-all disabled:opacity-50"
-      >
-        {loading ? "Searching..." : "Search"}
-      </button>
-    </form>
+        <button type="submit" disabled={loading} className="search-button">
+          {loading ? "Searching..." : "Search"}
+        </button>
+      </form>
+
+      <div className="search-info">
+        {loading && <p className="loading-text">Searching for recipes...</p>}
+      </div>
+    </div>
   );
 };
 
