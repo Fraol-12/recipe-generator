@@ -7,38 +7,45 @@ router.post('/search', async (req, res) => {
     const query = req.body.query;
     if (!query) return res.status(400).json({ message: 'Query is required' });
 
+    // Step 1: Search recipes
     const response = await axios.get(
       `https://api.spoonacular.com/recipes/complexSearch`,
       {
         params: {
           apiKey: process.env.SPOONACULAR_API_KEY,
           query: query,
-          number: 3,
+          number: 10,
         },
       }
     );
 
-    if (!response.data.results || response.data.results.length === 0) {
+    const results = response.data.results;
+    if (!results || results.length === 0) {
       return res.status(404).json({ message: 'No recipes found' });
     }
 
-    const formattedResults = response.data.results.map((recipe) => ({
-      id: recipe.id,
-      title: recipe.title,
-      image: recipe.image,
-      
-    }));
+    // Step 2: Fetch detailed info for each recipe
+    const detailedResults = await Promise.all(
+      results.map(async (r) => {
+        const detailRes = await axios.get(
+          `https://api.spoonacular.com/recipes/${r.id}/information`,
+          { params: { apiKey: process.env.SPOONACULAR_API_KEY, includeNutrition: true } }
+        );
+        return detailRes.data;
+      })
+    );
 
-    res.json(formattedResults);
- } catch (error) {
-  console.error('Error fetching recipes:', error.response?.data || error.message || error);
-  if (error.response && error.response.status === 402) {
-    return res.status(429).json({ message: 'API request limit reached. Try again later.' });
+    res.json(detailedResults);
+
+  } catch (error) {
+    console.error('Error fetching recipes:', error.response?.data || error.message || error);
+    if (error.response && error.response.status === 402) {
+      return res.status(429).json({ message: 'API request limit reached. Try again later.' });
+    }
+    res.status(500).json({ message: 'Server error. Please try again later.' });
   }
-  res.status(500).json({ message: 'Server error. Please try again later.' });
-}
-
 });
+
 
 router.get('/:id', async (req, res) => {
   try {
