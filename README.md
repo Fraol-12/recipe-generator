@@ -36,11 +36,7 @@ cd backend
 npm install
 
 
-Create a .env file in /backend:
 
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-SPOONACULAR_API_KEY=your_api_key
 
 
 Run the backend:
