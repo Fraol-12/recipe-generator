@@ -18,7 +18,7 @@ Smooth UI with responsive design.
 
 📦 Tech Stack
 
-Frontend: React.js, CSS (or Tailwind if configured)
+Frontend: React.js, CSS 
 
 Backend: Node.js, Express
 
@@ -79,7 +79,8 @@ Recipe-Finder/
 │   └── .env
 ├── front-end/            # React frontend
 │   ├── src/
-│   │   ├── components/   # React components
+│   │   ├── components/
+|   |   |-- CSS        
 │   │   ├── App.js
 │   │   └── index.js
 │   └── package.json
